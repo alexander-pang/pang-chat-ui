@@ -5,7 +5,7 @@ import WebSocketConnector from "./WebSocketConnector";
 import Chat from "./Chat";
 import Sidebar from "./Sidebar";
 
-type Client = {
+export type Client = {
   connectionId: string;
   nickname: string;
 };
@@ -16,6 +16,10 @@ function App() {
   const [nickname, setNickname] = useState(
     window.localStorage.getItem("nickname") || ""
   );
+
+  const [clients, setClients] = useState<Client[]>([]);
+
+  const [targetNickname, setTargetNickname] = useState("");
 
   useEffect(() => {
     window.localStorage.setItem("nickname", nickname);
@@ -45,12 +49,13 @@ function App() {
       }
     }
     /* console.log(message.value); */
+    setClients(message.value.clients);
   }
 
   return(
     <div className="flex">
       <div className="flex-none w-16 md:w-40 border-r-2">
-        <Sidebar />
+        <Sidebar clients={clients} setTargetNickName={setTargetNickname}/>
       </div>
       <div className="flex-auto">
         <Chat/>
