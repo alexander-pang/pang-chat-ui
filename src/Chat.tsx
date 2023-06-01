@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { Message } from "./App";
 
-const Chat = () => {
+const Chat = ({
+    messages,
+    sendMessage
+} : {
+    messages:Message[];
+    sendMessage: (message: string) => void;
+}) => {
+    const [message,setMessage] = useState("");
+    const submit = () => {
+        sendMessage(message);
+        setMessage("");
+    };
+
     return(
         <div className="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen">
       <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
@@ -299,6 +312,8 @@ const Chat = () => {
             type="text"
             placeholder="Write your message!"
             className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"
+            onKeyPress={(e) => e.key === "Enter" ? submit() : null}
+            onChange={(e) => setMessage(e.target.value)}
           />
           <div className="absolute right-0 items-center inset-y-0 hidden sm:flex">
             <button
@@ -367,6 +382,7 @@ const Chat = () => {
             <button
               type="button"
               className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
+              onClick={() => submit()}
             >
               <span className="font-bold">Send</span>
               <svg
